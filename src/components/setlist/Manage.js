@@ -1,9 +1,14 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { MaterialReactTable } from "material-react-table";
 import { Box, Typography } from "@mui/material";
 import { data } from "./MakeData";
+import * as Models from "./Models";
 
 const Example = () => {
+  useEffect(async () => {
+    let response = await Models.getData({});
+    console.log("response = ", response);
+  });
   // const columns = [];
   //column definitions...
   const columns = useMemo(
