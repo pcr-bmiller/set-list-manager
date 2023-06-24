@@ -1,0 +1,4 @@
+{
+  "appService.deploySubpath": "build",
+  "appService.defaultWebAppToDeploy": "/subscriptions/569285c9-e9ec-46c1-8a4a-b8ab9f010530/resourceGroups/RECOVRR-PROD/providers/Microsoft.Web/sites/recovrr-forgot-password"
+}
