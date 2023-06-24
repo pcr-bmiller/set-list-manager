@@ -3,7 +3,7 @@ import "./App.css";
 import React from "react";
 import SnackbarHandler from "./components/utils/SnackbarHandler";
 import { ThemeProvider, createTheme } from "@material-ui/core/styles";
-import Password from "./components/forgot/Password";
+import Password from "./components/setlist/Manage";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import List from "@material-ui/core/List";
@@ -21,8 +21,8 @@ function Copyright(props) {
       <br />
       <Typography variant="body2" align="center" {...props}>
         {"Copyright © "}
-        <Link color="inherit" href="https://www.recovrr.com/">
-          Recovrr
+        <Link color="inherit" href="https://www.rottenbobby.com/">
+          Rotten Bobby
         </Link>{" "}
         {new Date().getFullYear()}
         {"."}

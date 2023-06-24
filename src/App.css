@@ -3,11 +3,11 @@
   text-decoration: none !important;
 }
 html {
-  background-color: #303030 !important;
+  /* background-color: #303030 !important; */
   /* overflow: hidden; */
 }
 .App {
-  background-color: #303030 !important;
+  /* background-color: #303030 !important; */
   height: 100vh;
   /* overflow: hidden; */
 }
@@ -588,13 +588,14 @@ input {
   top: -4px;
 }
 
-.recovrr-logo {
+.logo {
   text-align: center;
   margin-top: 2vh;
   margin-bottom: 2vh;
+  height: 62px;
   cursor: pointer;
 }
-.recovrr-logo-wrapper {
+.logo-wrapper {
   display: inline !important;
   text-align: center;
   align-items: center;

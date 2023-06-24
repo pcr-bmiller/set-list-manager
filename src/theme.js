@@ -4,8 +4,8 @@ import { getCookie } from "./components/utils/HelperFunctions";
 const environment = getCookie("x_environment") ? getCookie("x_environment") : "Test";
 const theme = createTheme({
   palette: {
-    //type: "light",
-    type: "dark",
+    type: "light",
+    // type: "dark",
     primary: {
       main: environment === "Test" ? "#27c5e2" : "#a470ff",
     },
