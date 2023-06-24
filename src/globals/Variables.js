@@ -26,6 +26,11 @@ SERVICES_DEFINITION["RECOVRR-IOS"] = {
   subscription_key: process.env.REACT_APP_SUBSCRIPTION,
 };
 
+SERVICES_DEFINITION["SETLIST"] = {
+  URL: process.env.REACT_APP_APIM_URL + "/setlist",
+  subscription_key: process.env.REACT_APP_SUBSCRIPTION,
+};
+
 export const SERVICES = SERVICES_DEFINITION;
 
 export const FORGOT_PASSWORD = process.env.REACT_APP_FORGOT_PASSWORD;
