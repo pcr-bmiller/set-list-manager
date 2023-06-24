@@ -1,27 +1,26 @@
 export const data = [
   {
-    firstName: "Dylan",
-    lastName: "Murray",
-    city: "East Daphne",
+    name: "Hey Man Nice Shot",
+    guitar: "D",
+    bass: "D",
+    duration: "4:00",
   },
   {
-    firstName: "Raquel",
-    lastName: "Kohler",
-    city: "Columbus",
+    name: "Jurassitol",
+    guitar: "D",
+    bass: "D",
+    duration: "4:00",
   },
   {
-    firstName: "Ervin",
-    lastName: "Reinger",
-    city: "South Linda",
+    name: "Trip Like I Do",
+    guitar: "D",
+    bass: "C",
+    duration: "4:00",
   },
   {
-    firstName: "Brittany",
-    lastName: "McCullough",
-    city: "Lincoln",
-  },
-  {
-    firstName: "Branson",
-    lastName: "Frami",
-    city: "Charleston",
+    name: "Take a Picture",
+    guitar: "D",
+    bass: "D",
+    duration: "4:00",
   },
 ];

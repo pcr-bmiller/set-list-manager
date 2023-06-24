@@ -4,9 +4,33 @@ import { Box, Typography } from "@mui/material";
 import { data } from "./MakeData";
 
 const Example = () => {
-  const columns = [];
+  // const columns = [];
   //column definitions...
-
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "name", //access nested data with dot notation
+        header: "Song",
+        size: 150,
+      },
+      {
+        accessorKey: "guitar",
+        header: "Guitar",
+        size: 150,
+      },
+      {
+        accessorKey: "bass",
+        header: "Bass",
+        size: 150,
+      },
+      {
+        accessorKey: "duration",
+        header: "Duration",
+        size: 150,
+      },
+    ],
+    []
+  );
   const [data1, setData1] = useState(() => data.slice(0, 3));
   const [data2, setData2] = useState(() => data.slice(3, 5));
 
@@ -60,7 +84,7 @@ const Example = () => {
         }}
         renderTopToolbarCustomActions={() => (
           <Typography color="success.main" variant="h4">
-            Nice List
+            All Songs
           </Typography>
         )}
       />
@@ -85,7 +109,7 @@ const Example = () => {
         }}
         renderTopToolbarCustomActions={() => (
           <Typography color="error.main" variant="h4">
-            Naughty List
+            Set List
           </Typography>
         )}
       />
