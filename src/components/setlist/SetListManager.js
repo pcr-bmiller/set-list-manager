@@ -4,11 +4,27 @@ import { Box, Typography } from "@mui/material";
 import { data } from "./MakeData";
 import * as Models from "./Models";
 
-const Example = () => {
-  useEffect(async () => {
-    let response = await Models.getData({});
+const SetListManager = () => {
+  const [dataRead, setData] = useState({});
+  const [data1, setData1] = useState(() => data.slice(0, 3));
+  const [data2, setData2] = useState(() => data.slice(3, 5));
+
+  const [draggingRow, setDraggingRow] = useState(null);
+  const [hoveredTable, setHoveredTable] = useState(null);
+  const [rowSelection, setRowSelection] = useState({});
+  useEffect(() => {
+    getRecordData();
+  }, []);
+
+  const getRecordData = async () => {
+    let response = await Models.getData();
     console.log("response = ", response);
-  });
+    return response;
+  };
+
+  useEffect(() => {
+    //do something when the row selection changes...
+  }, [rowSelection]);
   // const columns = [];
   //column definitions...
   const columns = useMemo(
@@ -36,11 +52,6 @@ const Example = () => {
     ],
     []
   );
-  const [data1, setData1] = useState(() => data.slice(0, 3));
-  const [data2, setData2] = useState(() => data.slice(3, 5));
-
-  const [draggingRow, setDraggingRow] = useState(null);
-  const [hoveredTable, setHoveredTable] = useState(null);
 
   const commonTableProps = {
     columns,
@@ -117,9 +128,12 @@ const Example = () => {
             Set List
           </Typography>
         )}
+        enableRowSelection
+        onRowSelectionChange={setRowSelection} //connect internal row selection state to your own
+        state={{ rowSelection }} //pass our managed row selection state to the table to use
       />
     </Box>
   );
 };
 
-export default Example;
+export default SetListManager;

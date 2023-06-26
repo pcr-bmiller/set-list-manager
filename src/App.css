@@ -3,11 +3,11 @@
   text-decoration: none !important;
 }
 html {
-  /* background-color: #303030 !important; */
+  background-color: #303030 !important;
   /* overflow: hidden; */
 }
 .App {
-  /* background-color: #303030 !important; */
+  background-color: #303030 !important;
   height: 100vh;
   /* overflow: hidden; */
 }
@@ -35,7 +35,7 @@ html {
   text-align: center;
   display: block;
   position: relative;
-  width: 80%;
+  width: 75%;
   margin: 100px auto;
 }
 ._404 {

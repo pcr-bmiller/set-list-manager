@@ -31,22 +31,22 @@ export async function postForm({ services, token, password }) {
   }
 }
 
-export async function getData({ services = null, token, password }) {
+export async function getData() {
   const service = globals.SERVICES["SETLIST"];
   console.log("globals.SERVICES = ", globals);
   const body = {};
   let fetchProperties = {
     BaseUrl: `${service.URL}/SONG`,
-    Method: "POST",
+    Method: "GET",
     SuppressMessageOverride: false,
-    CallBody: body,
+    // CallBody: body,
     HeaderVals: {
       "Content-Type": "application/json",
       "Ocp-Apim-Subscription-Key": service.subscription_key,
-      token: token,
-      password: password,
-      Authorization: `Bearer ${getCookie("x_universal_id")}`,
-      Environment: getCookie("x_environment") ? getCookie("x_environment") : "Test",
+      // token: token,
+      // password: password,
+      // Authorization: `Bearer ${getCookie("x_universal_id")}`,
+      // Environment: getCookie("x_environment") ? getCookie("x_environment") : "Test",
       // "o-integrator": service.subscription_key,
     },
   };

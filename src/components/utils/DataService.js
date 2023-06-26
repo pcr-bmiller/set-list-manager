@@ -137,29 +137,29 @@ function Delete(parameters) {
 
 function Get(parameters) {
   //Decode the JWT from the URL
-  let sessionToken = getCookie("x_universal_id");
-  if (sessionToken) {
-    var decodedToken = jwt.decode(sessionToken, { complete: true });
-    let exp = decodedToken
-      ? decodedToken.payload
-        ? decodedToken.payload.exp
-        : parseInt(new Date().getTime())
-      : parseInt(new Date().getTime());
+  // let sessionToken = getCookie("x_universal_id");
+  // if (sessionToken) {
+  //   var decodedToken = jwt.decode(sessionToken, { complete: true });
+  //   let exp = decodedToken
+  //     ? decodedToken.payload
+  //       ? decodedToken.payload.exp
+  //       : parseInt(new Date().getTime())
+  //     : parseInt(new Date().getTime());
 
-    let expiration = parseInt(exp) * 1000;
-    let myTime = parseInt(new Date().getTime());
-    let difference = expiration - myTime;
-    //IF we are coming into this and we have 5 minutes left on the token, refresh it
-    if (difference <= 300000) {
-      // TOKEN STALE RELOAD SITE AND GENERATE NEW TOKEN in APP.js
-      document.location.reload();
-    } else {
-      // VALID DONT REFRESH TOKEN
-    }
-  } else {
-    //MISSING TOKEN
-    document.location.reload();
-  }
+  //   let expiration = parseInt(exp) * 1000;
+  //   let myTime = parseInt(new Date().getTime());
+  //   let difference = expiration - myTime;
+  //   //IF we are coming into this and we have 5 minutes left on the token, refresh it
+  //   if (difference <= 300000) {
+  //     // TOKEN STALE RELOAD SITE AND GENERATE NEW TOKEN in APP.js
+  //     document.location.reload();
+  //   } else {
+  //     // VALID DONT REFRESH TOKEN
+  //   }
+  // } else {
+  //   //MISSING TOKEN
+  //   document.location.reload();
+  // }
 
   return new Promise((resolve, reject) => {
     fetch(parameters.BaseUrl, {
