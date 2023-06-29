@@ -69,11 +69,11 @@ const SetListManager = () => {
     enableFullScreenToggle: false,
     muiTableContainerProps: {
       sx: {
-        minHeight: "320px",
+        minHeight: "450px",
       },
     },
     onDraggingRowChange: setDraggingRow,
-    state: { draggingRow },
+    state: { draggingRow, rowSelection },
   };
 
   return (
@@ -114,10 +114,11 @@ const SetListManager = () => {
           </Typography>
         )}
       />
+      {/* SETLIST  */}
       <MaterialReactTable
         {...commonTableProps}
         data={data2}
-        getRowId={(originalRow) => `table-2-${originalRow.firstName}`}
+        getRowId={(originalRow) => `table-2-${originalRow.name}`}
         enableRowActions
         enableRowOrdering
         renderRowActionMenuItems={({ row, closeMenu }) => [
@@ -149,15 +150,21 @@ const SetListManager = () => {
             <ShareIcon /> Share
           </MenuItem>,
         ]}
-        muiTableBodyRowDragHandleProps={{
+        muiTableBodyRowDragHandleProps={({ table }) => ({
           onDragEnd: () => {
             if (hoveredTable === "table-1") {
               setData1((data1) => [...data1, draggingRow.original]);
               setData2((data2) => data2.filter((d) => d !== draggingRow.original));
             }
             setHoveredTable(null);
+            const { draggingRow, hoveredRow } = table.getState();
+            console.log("hoveredRow", hoveredRow);
+            if (hoveredRow && draggingRow) {
+              data2.splice(hoveredRow.index, 0, data2.splice(draggingRow.index, 1)[0]);
+              setData2([...data2]);
+            }
           },
-        }}
+        })}
         muiTablePaperProps={{
           onDragEnter: () => setHoveredTable("table-2"),
           sx: {
@@ -171,7 +178,7 @@ const SetListManager = () => {
         )}
         enableRowSelection
         onRowSelectionChange={setRowSelection} //connect internal row selection state to your own
-        state={{ rowSelection }} //pass our managed row selection state to the table to use
+        // state={{ rowSelection }} //pass our managed row selection state to the table to use
       />
     </Box>
   );
