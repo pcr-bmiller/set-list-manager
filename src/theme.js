@@ -14,12 +14,12 @@ const theme = createTheme({
   palette: {
     //type: "light",
     mode: "dark",
-    type: "dark",
+    //type: "dark",
     primary: {
-      main: environment === "Test" ? "#27c5e2" : "#a470ff",
+      main: "#000000",
     },
     secondary: {
-      main: "#ae00d7",
+      main: "#000000",
     },
     error: {
       main: "#f50808",
@@ -31,4 +31,4 @@ const theme = createTheme({
   },
 });
 
-export default darkTheme;
+export default theme;

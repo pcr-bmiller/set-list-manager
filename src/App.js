@@ -8,7 +8,7 @@ import SetListManager from "./components/setlist/SetListManager";
 import { makeStyles } from "@material-ui/core/styles";
 // import CssBaseline from "@material-ui/core/CssBaseline";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
@@ -22,10 +22,10 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#a470ff",
+      main: "#4d95f5",
     },
     secondary: {
-      main: "#ae00d7",
+      main: "#00cbb4",
     },
     error: {
       main: "#f50808",
@@ -36,7 +36,7 @@ function Copyright(props) {
   return (
     <>
       <br />
-      <Typography variant="body2" align="center" {...props}>
+      <Typography color="common.white" align="center" {...props}>
         {"Copyright © "}
         <Link color="inherit" href="https://www.rottenbobby.com/">
           Rotten Bobby
@@ -133,6 +133,7 @@ class App extends React.Component {
           />
 
           <SetListManager />
+          <Copyright />
         </ThemeProvider>
       </div>
     );

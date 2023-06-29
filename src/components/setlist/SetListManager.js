@@ -1,8 +1,18 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { MaterialReactTable } from "material-react-table";
+import Button from "@mui/material/Button";
+import MuiMenuItem from "@mui/material/MenuItem";
+import { styled } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ShareIcon from "@mui/icons-material/Share";
 import { Box, Typography } from "@mui/material";
 import { data } from "./MakeData";
 import * as Models from "./Models";
+const MenuItem = styled(MuiMenuItem)({
+  display: "flex",
+  gap: "0.75rem",
+});
 
 const SetListManager = () => {
   const [dataRead, setData] = useState({});
@@ -37,17 +47,17 @@ const SetListManager = () => {
       {
         accessorKey: "guitar",
         header: "Guitar",
-        size: 150,
+        size: 20,
       },
       {
         accessorKey: "bass",
         header: "Bass",
-        size: 150,
+        size: 20,
       },
       {
         accessorKey: "duration",
         header: "Duration",
-        size: 150,
+        size: 50,
       },
     ],
     []
@@ -70,7 +80,7 @@ const SetListManager = () => {
     <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: { xs: "auto", lg: "1fr 1fr" },
+        gridTemplateColumns: { xs: "auto", lg: "48% 50% " },
         gap: "1rem",
         overflow: "auto",
         p: "4px",
@@ -99,7 +109,7 @@ const SetListManager = () => {
           },
         }}
         renderTopToolbarCustomActions={() => (
-          <Typography color="success.main" variant="h4">
+          <Typography color="primary" variant="h4">
             All Songs
           </Typography>
         )}
@@ -108,6 +118,37 @@ const SetListManager = () => {
         {...commonTableProps}
         data={data2}
         getRowId={(originalRow) => `table-2-${originalRow.firstName}`}
+        enableRowActions
+        enableRowOrdering
+        renderRowActionMenuItems={({ row, closeMenu }) => [
+          <MenuItem
+            key={1}
+            onClick={() => {
+              console.log("View Profile", row);
+              closeMenu();
+            }}
+          >
+            <AccountCircleIcon /> View Profile
+          </MenuItem>,
+          <MenuItem
+            key={2}
+            onClick={() => {
+              console.info("Remove", row);
+              closeMenu();
+            }}
+          >
+            <DeleteIcon /> Remove
+          </MenuItem>,
+          <MenuItem
+            key={3}
+            onClick={() => {
+              console.info("Share", row);
+              closeMenu();
+            }}
+          >
+            <ShareIcon /> Share
+          </MenuItem>,
+        ]}
         muiTableBodyRowDragHandleProps={{
           onDragEnd: () => {
             if (hoveredTable === "table-1") {
@@ -124,7 +165,7 @@ const SetListManager = () => {
           },
         }}
         renderTopToolbarCustomActions={() => (
-          <Typography color="error.main" variant="h4">
+          <Typography color="secondary" variant="h4">
             Set List
           </Typography>
         )}

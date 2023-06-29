@@ -35,7 +35,7 @@ html {
   text-align: center;
   display: block;
   position: relative;
-  width: 75%;
+  width: 80%;
   margin: 100px auto;
 }
 ._404 {
@@ -326,7 +326,7 @@ html {
 }
 
 label {
-  color: rgb(37, 39, 51);
+  /* color: rgb(37, 39, 51); */
   font-family: Muli;
   font-style: normal;
   /* font-weight: 600; */
