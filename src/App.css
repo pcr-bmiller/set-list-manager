@@ -3,11 +3,11 @@
   text-decoration: none !important;
 }
 html {
-  /* background-color: #303030 !important; */
+  background-color: #303030 !important;
   /* overflow: hidden; */
 }
 .App {
-  /* background-color: #303030 !important; */
+  background-color: #303030 !important;
   height: 100vh;
   /* overflow: hidden; */
 }
@@ -326,7 +326,7 @@ html {
 }
 
 label {
-  color: rgb(37, 39, 51);
+  /* color: rgb(37, 39, 51); */
   font-family: Muli;
   font-style: normal;
   /* font-weight: 600; */

@@ -2,24 +2,41 @@ import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
 import SnackbarHandler from "./components/utils/SnackbarHandler";
-import { ThemeProvider, createTheme } from "@material-ui/core/styles";
-import Password from "./components/setlist/Manage";
+// import { ThemeProvider, createTheme } from "@material-ui/core/styles";
+import SetListManager from "./components/setlist/SetListManager";
+
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+// import CssBaseline from "@material-ui/core/CssBaseline";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Link from "@material-ui/core/Link";
 import theme from "./theme";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#4d95f5",
+    },
+    secondary: {
+      main: "#00cbb4",
+    },
+    error: {
+      main: "#f50808",
+    },
+  },
+});
 function Copyright(props) {
   return (
     <>
       <br />
-      <Typography variant="body2" align="center" {...props}>
+      <Typography color="common.white" align="center" {...props}>
         {"Copyright © "}
         <Link color="inherit" href="https://www.rottenbobby.com/">
           Rotten Bobby
@@ -105,7 +122,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={darkTheme}>
           <SnackbarHandler
             open={this.state.alertOpen}
             message={this.state.alertMessage}
@@ -115,7 +132,8 @@ class App extends React.Component {
             closeAlert={() => this.setState({ alertOpen: false })}
           />
 
-          <Password />
+          <SetListManager />
+          <Copyright />
         </ThemeProvider>
       </div>
     );

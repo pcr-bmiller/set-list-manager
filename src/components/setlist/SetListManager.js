@@ -1,9 +1,40 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { MaterialReactTable } from "material-react-table";
+import Button from "@mui/material/Button";
+import MuiMenuItem from "@mui/material/MenuItem";
+import { styled } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ShareIcon from "@mui/icons-material/Share";
 import { Box, Typography } from "@mui/material";
 import { data } from "./MakeData";
+import * as Models from "./Models";
+const MenuItem = styled(MuiMenuItem)({
+  display: "flex",
+  gap: "0.75rem",
+});
 
-const Example = () => {
+const SetListManager = () => {
+  const [dataRead, setData] = useState({});
+  const [data1, setData1] = useState(() => data.slice(0, 3));
+  const [data2, setData2] = useState(() => data.slice(3, 5));
+
+  const [draggingRow, setDraggingRow] = useState(null);
+  const [hoveredTable, setHoveredTable] = useState(null);
+  const [rowSelection, setRowSelection] = useState({});
+  useEffect(() => {
+    getRecordData();
+  }, []);
+
+  const getRecordData = async () => {
+    let response = await Models.getData();
+    console.log("response = ", response);
+    return response;
+  };
+
+  useEffect(() => {
+    //do something when the row selection changes...
+  }, [rowSelection]);
   // const columns = [];
   //column definitions...
   const columns = useMemo(
@@ -16,26 +47,21 @@ const Example = () => {
       {
         accessorKey: "guitar",
         header: "Guitar",
-        size: 150,
+        size: 20,
       },
       {
         accessorKey: "bass",
         header: "Bass",
-        size: 150,
+        size: 20,
       },
       {
         accessorKey: "duration",
         header: "Duration",
-        size: 150,
+        size: 50,
       },
     ],
     []
   );
-  const [data1, setData1] = useState(() => data.slice(0, 3));
-  const [data2, setData2] = useState(() => data.slice(3, 5));
-
-  const [draggingRow, setDraggingRow] = useState(null);
-  const [hoveredTable, setHoveredTable] = useState(null);
 
   const commonTableProps = {
     columns,
@@ -54,7 +80,7 @@ const Example = () => {
     <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: { xs: "auto", lg: "1fr 1fr" },
+        gridTemplateColumns: { xs: "auto", lg: "48% 50% " },
         gap: "1rem",
         overflow: "auto",
         p: "4px",
@@ -83,7 +109,7 @@ const Example = () => {
           },
         }}
         renderTopToolbarCustomActions={() => (
-          <Typography color="success.main" variant="h4">
+          <Typography color="primary" variant="h4">
             All Songs
           </Typography>
         )}
@@ -92,6 +118,37 @@ const Example = () => {
         {...commonTableProps}
         data={data2}
         getRowId={(originalRow) => `table-2-${originalRow.firstName}`}
+        enableRowActions
+        enableRowOrdering
+        renderRowActionMenuItems={({ row, closeMenu }) => [
+          <MenuItem
+            key={1}
+            onClick={() => {
+              console.log("View Profile", row);
+              closeMenu();
+            }}
+          >
+            <AccountCircleIcon /> View Profile
+          </MenuItem>,
+          <MenuItem
+            key={2}
+            onClick={() => {
+              console.info("Remove", row);
+              closeMenu();
+            }}
+          >
+            <DeleteIcon /> Remove
+          </MenuItem>,
+          <MenuItem
+            key={3}
+            onClick={() => {
+              console.info("Share", row);
+              closeMenu();
+            }}
+          >
+            <ShareIcon /> Share
+          </MenuItem>,
+        ]}
         muiTableBodyRowDragHandleProps={{
           onDragEnd: () => {
             if (hoveredTable === "table-1") {
@@ -108,13 +165,16 @@ const Example = () => {
           },
         }}
         renderTopToolbarCustomActions={() => (
-          <Typography color="error.main" variant="h4">
+          <Typography color="secondary" variant="h4">
             Set List
           </Typography>
         )}
+        enableRowSelection
+        onRowSelectionChange={setRowSelection} //connect internal row selection state to your own
+        state={{ rowSelection }} //pass our managed row selection state to the table to use
       />
     </Box>
   );
 };
 
-export default Example;
+export default SetListManager;
