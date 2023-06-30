@@ -14,7 +14,7 @@ const MenuItem = styled(MuiMenuItem)({
   gap: "0.75rem",
 });
 
-const SetListManager = () => {
+const SetlistManager = () => {
   const [dataRead, setData] = useState({});
   const [data1, setData1] = useState(() => data.slice(0, 3));
   const [data2, setData2] = useState(() => data.slice(3, 5));
@@ -184,4 +184,4 @@ const SetListManager = () => {
   );
 };
 
-export default SetListManager;
+export default SetlistManager;
