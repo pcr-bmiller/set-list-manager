@@ -605,3 +605,32 @@ input {
   width: 100%;
   height: 56px;
 }
+
+.MuiTableCell-sizeSmall {
+  padding-left: 0px !important;
+}
+
+/* .MuiIconButton-colorInherit {
+  color: white !important;
+} */
+
+/* .MuiIconButton-root .MuiIconButton-label {
+  color: inherit;
+} */
+.stats-header-text {
+  font-size: 33px !important;
+  font-weight: bold !important;
+}
+
+.right {
+  text-align: right !important;
+  padding-right: 0px !important;
+}
+
+.no-bottom-border {
+  border-bottom: none !important;
+}
+
+.MuiTableBody-root td {
+  border-bottom: none !important;
+}

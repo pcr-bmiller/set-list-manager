@@ -11,6 +11,9 @@ import TableRow from "@material-ui/core/TableRow";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import IconButton from "@material-ui/core/IconButton";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import SaveIcon from "@mui/icons-material/Save";
+import SaveAsIcon from "@mui/icons-material/SaveAs";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import PhoneIphoneIcon from "@material-ui/icons/PhoneIphone";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -38,26 +41,71 @@ function useForceUpdate() {
   const [value, setValue] = useState(0); // integer state
   return () => setValue((value) => value + 1); // update the state to force render
 }
-function IntegrationTableContent() {
+function StatsContent(props) {
   const [token, setToken] = useState(getCookie("x_baobab_token"));
   const [created, setCreated] = useState(null);
   const [expiration, setExpiration] = useState(null);
   const [remaining, setRemaining] = useState(null);
   const [intervalStarted, setIntervalStarted] = useState(false);
   const mountedRef = useRef(true);
+  const [totalDuration, setTotalDuration] = useState("00:00:00");
 
   const forceUpdate = useForceUpdate();
 
   let interval;
 
-  useEffect(
-    () => () => {
-      clearInterval(interval);
-    },
-    []
-  );
+  useEffect(() => {
+    console.log("props = ", props.setList);
+  }, []);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    let times = [];
+    for (let dur in props.setList) {
+      times.push("00:" + props.setList[dur].Duration);
+      console.log("times =", times);
+    }
+
+    //const times = ["01:00:01", "01:00:10","01:54:00","01:30:00"]
+    if (times.length > 0) {
+      let finalSum = times.reduce(
+        (sum, curr) => {
+          //Obtain the current timestamp as an array of numbers
+          //[HRS, MINS, SECS]
+          let currTimeStamp = curr.split(":").map((token) => parseInt(token));
+
+          //Add the current seconds to the total seconds so far
+          sum[2] += currTimeStamp[2];
+          //See how many minutes you got leftover as a result of that addition
+          const leftOverMins = Math.floor(sum[2] / 60);
+          //Mod by 60, to keep the seconds under 60
+          sum[2] %= 60;
+
+          //Add the leftover minutes to the sum operation for minutes
+          sum[1] += currTimeStamp[1] + leftOverMins;
+          //Similar procedure as above
+          const leftOverHours = Math.floor(sum[1] / 60);
+          sum[1] %= 60;
+
+          sum[0] += currTimeStamp[0] + leftOverHours;
+          sum[0] %= 24;
+
+          return sum;
+        },
+        [0, 0, 0]
+      );
+
+      for (let s in finalSum) {
+        if (finalSum[s] < 10) {
+          finalSum[s] = "0" + finalSum[s];
+        }
+      }
+      console.log("FINAL SUM = ", finalSum.join(":"));
+      setTotalDuration(finalSum.join(":"));
+    } else {
+      setTotalDuration("00:00:00");
+    }
+  }, [props.setList]);
+
   const setlists = [
     { label: "Welcome to Rockville", year: 1994 },
     { label: "The Godfather", year: 1972 },
@@ -78,6 +126,7 @@ function IntegrationTableContent() {
               <b>Name</b>
             </TableCell>
             {/* <TableCell>Last Modified</TableCell> */}
+
             <TableCell>
               <b># of Songs</b>
             </TableCell>
@@ -98,38 +147,46 @@ function IntegrationTableContent() {
               <CheckCircleIcon style={{ color: green[500] }} />
             </TableCell> */}
             <TableCell>
-              {" "}
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={setlists}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} />}
-              />
+              <TableCell>
+                {" "}
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={setlists}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </TableCell>
+              <TableCell>
+                <IconButton color="primary">
+                  <Badge badgeContent={0} color="primary">
+                    <AddCircleIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton disabled={true} color="primary">
+                  <Badge badgeContent={0} color="primary">
+                    <SaveIcon />
+                  </Badge>
+                </IconButton>
+
+                <IconButton color="primary">
+                  <Badge badgeContent={0} color="primary">
+                    <SaveAsIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton color="primary">
+                  <Badge badgeContent={0} color="primary">
+                    <PrintIcon />
+                  </Badge>
+                </IconButton>
+              </TableCell>
             </TableCell>
+
             {/* <TableCell>{created}</TableCell> */}
-            <TableCell>
-              {/* <TextField
-                id="outlined-read-only-input"
-                // label="Read Only"
-                defaultValue=""
-                InputProps={{
-                  readOnly: true,
-                }}
-              /> */}
-            </TableCell>
-            <TableCell>
-              {/* <TextField
-                id="outlined-read-only-input"
-                // label="Read Only"
-                defaultValue=""
-                InputProps={{
-                  readOnly: true,
-                }}
-              /> */}
-            </TableCell>
-            <TableCell>
-              <IconButton color="inherit">
+            <TableCell className="stats-header-text">{props.setList.length}</TableCell>
+            <TableCell className="stats-header-text">{totalDuration}</TableCell>
+            {/* <TableCell className="right"> */}
+            {/* <IconButton color="inherit">
                 <Badge badgeContent={0} color="error">
                   <NotificationsIcon />
                 </Badge>
@@ -138,13 +195,13 @@ function IntegrationTableContent() {
                 <Badge badgeContent={0} color="error">
                   <LibraryMusicIcon />
                 </Badge>
-              </IconButton>
-              <IconButton color="inherit">
+              </IconButton> */}
+            {/* <IconButton color="inherit">
                 <Badge badgeContent={0} color="error">
                   <PrintIcon />
                 </Badge>
-              </IconButton>
-            </TableCell>
+              </IconButton> */}
+            {/* </TableCell> */}
           </TableRow>
         </TableBody>
       </Table>
@@ -152,11 +209,11 @@ function IntegrationTableContent() {
   );
 }
 
-export default function IntegrationTable() {
+export default function Stats(props) {
   return (
     // TODO: Remove ThemeProvider once makeStyles is removed
     <ThemeProvider theme={defaultTheme}>
-      <IntegrationTableContent />
+      <StatsContent {...props} />
     </ThemeProvider>
   );
 }

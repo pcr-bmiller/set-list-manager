@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import SnackbarHandler from "./components/utils/SnackbarHandler";
 // import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SetlistManager from "./components/setlist/Manager";
-import Stats from "./components/setlist/Stats";
+
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 // import CssBaseline from "@mui/material/CssBaseline";
@@ -298,7 +298,6 @@ function DashboardContent(props) {
       >
         <div className={classes.appBarSpacer} />
         <Container maxWidth="xl" style={{ marginTop: 16, marginBottom: 16 }}>
-          <Stats />
           <SetlistManager />
 
           <Copyright style={{ pt: 4 }} />

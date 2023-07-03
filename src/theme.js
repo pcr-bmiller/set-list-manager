@@ -16,10 +16,10 @@ const theme = createTheme({
     mode: "dark",
     //type: "dark",
     primary: {
-      main: "#000000",
+      main: "#ffffff",
     },
     secondary: {
-      main: "#000000",
+      main: "#ffffff",
     },
     error: {
       main: "#f50808",
