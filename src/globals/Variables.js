@@ -26,8 +26,8 @@ SERVICES_DEFINITION["RECOVRR-IOS"] = {
   subscription_key: process.env.REACT_APP_SUBSCRIPTION,
 };
 
-SERVICES_DEFINITION["SETLIST"] = {
-  URL: process.env.REACT_APP_APIM_URL + "/setlist",
+SERVICES_DEFINITION["ROTTEN"] = {
+  URL: process.env.REACT_APP_APIM_URL + "/rotten",
   subscription_key: process.env.REACT_APP_SUBSCRIPTION,
 };
 

@@ -634,3 +634,7 @@ input {
 .MuiTableBody-root td {
   border-bottom: none !important;
 }
+
+.modal-padding {
+  padding-top: 25px !important;
+}

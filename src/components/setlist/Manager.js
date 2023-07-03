@@ -71,11 +71,40 @@ const SetlistManager = () => {
     let setlistsRead = await Models.getTable({ table: "SETLIST" });
     if (setlistsRead) {
       // Set All Songs
+
+      for (let sl of setlistsRead) {
+        sl["label"] = sl.Name;
+        sl["value"] = sl.rowkey;
+      }
       console.log("set setlists = ", setlistsRead);
       setSetLists(setlistsRead);
     }
   };
-  const getSetlist = async () => {};
+  const handleSetlist = async (sl = null) => {
+    console.log("handleSetlist = ", sl);
+    let sls = setLists;
+    console.log("SL 1=== ", sl);
+    if (sl === null) {
+      if (setList !== null) {
+        sl = setList;
+        console.log("SL 2=== ", sl);
+      }
+    }
+    if (setLists.length > 0) {
+      sl = sls.filter((x) => {
+        return x.value === sl.value;
+      });
+      console.log("SL3 === ", sl);
+      if (sl.length > 0) {
+        if (sl[0]["Songs"]) {
+          console.log("json parse = ", sl[0].Songs);
+          // sl = JSON.stringify(sl[0].Songs);
+          console.log("json parse = ", eval(sl[0].Songs));
+          setSetList(eval(sl[0].Songs));
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (setList.length > 0) {
@@ -209,6 +238,7 @@ const SetlistManager = () => {
         setLists={setLists}
         setList={setList}
         setCreateSetListModalOpen={setCreateSetListModalOpen}
+        handleSetlist={handleSetlist}
       />
 
       <Box
@@ -230,12 +260,12 @@ const SetlistManager = () => {
           renderRowActions={({ row, table }) => (
             <Box sx={{ display: "flex", gap: "1rem" }}>
               <Tooltip arrow placement="left" title="Edit">
-                <IconButton onClick={() => table.setEditingRow(row)}>
+                <IconButton color="inherit" onClick={() => table.setEditingRow(row)}>
                   <Edit />
                 </IconButton>
               </Tooltip>
               <Tooltip arrow placement="right" title="Delete">
-                <IconButton color="error" onClick={() => handleDeleteRow(row)}>
+                <IconButton color="inherit" onClick={() => handleDeleteRow(row)}>
                   <Delete />
                 </IconButton>
               </Tooltip>
@@ -418,7 +448,7 @@ export const CreateNewSetListModal = ({ open, columns, onClose, onSubmit }) => {
   return (
     <Dialog open={open}>
       <DialogTitle textAlign="center">Add New Song</DialogTitle>
-      <DialogContent>
+      <DialogContent className="modal-padding">
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack
             sx={{

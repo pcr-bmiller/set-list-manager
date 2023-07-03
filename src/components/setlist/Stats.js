@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider, createTheme } from "@material-ui/core/styles";
 
 import defaultTheme from "../../theme";
 
@@ -36,6 +36,7 @@ import { getCookie, pingTokenBAOBAB, millisToMinutesAndSeconds } from "../utils/
 function preventDefault(event) {
   event.preventDefault();
 }
+
 //create your forceUpdate hook
 function useForceUpdate() {
   const [value, setValue] = useState(0); // integer state
@@ -62,7 +63,6 @@ function StatsContent(props) {
     let times = [];
     for (let dur in props.setList) {
       times.push("00:" + props.setList[dur].Duration);
-      console.log("times =", times);
     }
 
     //const times = ["01:00:01", "01:00:10","01:54:00","01:30:00"]
@@ -152,29 +152,32 @@ function StatsContent(props) {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={setlists}
+                  options={props.setLists && props.setLists}
+                  onChange={(e, val) => {
+                    props.handleSetlist(val);
+                  }}
                   sx={{ width: 300 }}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </TableCell>
               <TableCell>
-                <IconButton color="primary">
+                <IconButton color="inherit">
                   <Badge badgeContent={0} color="primary">
                     <AddCircleIcon />
                   </Badge>
                 </IconButton>
-                <IconButton disabled={true} color="primary">
+                <IconButton disabled={true} color="inherit">
                   <Badge badgeContent={0} color="primary">
                     <SaveIcon />
                   </Badge>
                 </IconButton>
 
-                <IconButton color="primary">
+                <IconButton color="inherit">
                   <Badge badgeContent={0} color="primary">
                     <SaveAsIcon />
                   </Badge>
                 </IconButton>
-                <IconButton color="primary">
+                <IconButton color="inherit">
                   <Badge badgeContent={0} color="primary">
                     <PrintIcon />
                   </Badge>

@@ -45,6 +45,7 @@ import LayersIcon from "@material-ui/icons/Layers";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import theme from "./theme";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+
 import CssBaseline from "@mui/material/CssBaseline";
 import CssBaseline2 from "@mui/material/CssBaseline";
 
@@ -62,7 +63,7 @@ const darkTheme = createTheme({
       main: "#00cbb4",
     },
     error: {
-      main: "#f50808",
+      main: "#eb4034",
     },
   },
 });

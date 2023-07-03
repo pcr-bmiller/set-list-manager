@@ -23,7 +23,7 @@ export async function postSong({ body = {} }) {
   }
 }
 export async function deleteSong({ body = {} }) {
-  const service = globals.SERVICES["SETLIST"];
+  const service = globals.SERVICES["ROTTEN"];
   let fetchProperties = {
     BaseUrl: `${service.URL}/SONG`,
     Method: "DELETE",
@@ -43,7 +43,7 @@ export async function deleteSong({ body = {} }) {
 }
 // GET ALL SONGS
 export async function getSongs() {
-  const service = globals.SERVICES["SETLIST"];
+  const service = globals.SERVICES["ROTTEN"];
   console.log("globals.SERVICES = ", globals);
   const body = {};
   let fetchProperties = {
@@ -69,7 +69,7 @@ export async function getSongs() {
 
 // GET SETLISTS
 export async function getSetlists() {
-  const service = globals.SERVICES["SETLIST"];
+  const service = globals.SERVICES["ROTTEN"];
   console.log("globals.SERVICES = ", globals);
   const body = {};
   let fetchProperties = {
@@ -94,7 +94,7 @@ export async function getSetlists() {
 }
 
 export async function getTable({ table, filter = "", orderby = "" }) {
-  const service = globals.SERVICES["SETLIST"];
+  const service = globals.SERVICES["ROTTEN"];
   if (filter !== "") {
     filter = `?$filter=${filter}`;
   }
@@ -126,7 +126,7 @@ export async function getTable({ table, filter = "", orderby = "" }) {
   }
 }
 export async function getTableById({ table, key, id }) {
-  const service = globals.SERVICES["SETLIST"];
+  const service = globals.SERVICES["ROTTEN"];
   const filter = `$filter=${key} eq '${id}'`;
   let fetchProperties = {
     BaseUrl: `${service.URL}/${table}?${filter}`,
@@ -150,7 +150,7 @@ export async function getTableById({ table, key, id }) {
 }
 
 export async function deleteTable({ table, id }) {
-  const service = globals.SERVICES["SETLIST"];
+  const service = globals.SERVICES["ROTTEN"];
   let response = [];
   let fetchProperties = {
     BaseUrl: `${service.URL}/${table}/${id}`,
@@ -170,5 +170,50 @@ export async function deleteTable({ table, id }) {
     return { error: true };
   } else {
     return { error: false };
+  }
+}
+
+export async function patchTable({ table, id, body }) {
+  const service = globals.SERVICES["ROTTEN"];
+
+  let fetchProperties = {
+    BaseUrl: `${service.URL}/${table}/${id}`,
+    Method: "PATCH",
+    SuppressMessageOverride: false,
+    CallBody: body,
+    HeaderVals: {
+      "Content-Type": "application/json",
+      "Ocp-Apim-Subscription-Key": service.subscription_key,
+    },
+  };
+
+  let response = await dataService.FetchData(fetchProperties);
+
+  if (!response.error) {
+    return { error: true };
+  } else {
+    return { error: false };
+  }
+}
+export async function postTable({ table, id, body }) {
+  const service = globals.SERVICES["ROTTEN"];
+
+  let fetchProperties = {
+    BaseUrl: `${service.URL}/${table}`,
+    Method: "POST",
+    SuppressMessageOverride: false,
+    CallBody: body,
+    HeaderVals: {
+      "Content-Type": "application/json",
+      "Ocp-Apim-Subscription-Key": service.subscription_key,
+    },
+  };
+
+  let response = await dataService.FetchData(fetchProperties);
+
+  if (!response) {
+    return { error: true, response };
+  } else {
+    return { error: false, response };
   }
 }

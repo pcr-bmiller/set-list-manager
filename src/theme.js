@@ -9,12 +9,12 @@ const darkTheme = createTheme({
   },
 });
 // A custom theme for this app
-const environment = getCookie("x_environment") ? getCookie("x_environment") : "Test";
+
 const theme = createTheme({
   palette: {
     //type: "light",
     mode: "dark",
-    //type: "dark",
+    type: "dark",
     primary: {
       main: "#ffffff",
     },
