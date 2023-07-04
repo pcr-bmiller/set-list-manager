@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import React, { Component, useEffect, useRef } from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 
 import SnackbarHandler from "./components/utils/SnackbarHandler";
@@ -153,9 +153,9 @@ const useStyles = makeStyles((theme) => ({
 function DashboardContent(props) {
   const mounted = useRef();
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const [main, setMain] = React.useState("Dashboard");
-  const [title, setTitle] = React.useState(
+  const [open, setOpen] = useState(true);
+  const [main, setMain] = useState("Dashboard");
+  const [title, setTitle] = useState(
     window.location.pathname.split("/")[1].replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     })
@@ -299,8 +299,7 @@ function DashboardContent(props) {
       >
         <div className={classes.appBarSpacer} />
         <Container maxWidth="xl" style={{ marginTop: 16, marginBottom: 16 }}>
-          <SetlistManager />
-
+          <SetlistManager handleAlert={props.handleAlert} />
           <Copyright style={{ pt: 4 }} />
         </Container>
       </Box>
@@ -308,29 +307,43 @@ function DashboardContent(props) {
   );
 }
 
-class App extends React.Component {
-  state = {
-    data: [],
-    showThankYou: false,
+export default function Dashboard(props) {
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState(true);
+  const [duration, setDuration] = useState(true);
+  const closeAlert = () => {
+    setAlertOpen(false);
   };
-  render() {
-    return (
-      <div className="App">
-        <ThemeProvider theme={darkTheme}>
-          <SnackbarHandler
-            open={this.state.alertOpen}
-            message={this.state.alertMessage}
-            type={this.state.alertType}
-            duration={this.state.duration}
-            logout={this.routeToLogout}
-            closeAlert={() => this.setState({ alertOpen: false })}
-          />
+  const handleAlert = (message, type) => {
+    setAlertOpen(true);
+    setAlertMessage(message);
+    setAlertType(type);
+  };
 
-          <DashboardContent />
-        </ThemeProvider>
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <ThemeProvider theme={darkTheme}>
+        <SnackbarHandler
+          open={alertOpen}
+          message={alertMessage}
+          type={alertType}
+          // duration={duration}
+          closeAlert={() => {
+            closeAlert();
+          }}
+          // open={this.state.alertOpen}
+          // message={this.state.alertMessage}
+          // type={this.state.alertType}
+          // duration={this.state.duration}
+          // logout={this.routeToLogout}
+          // closeAlert={() => this.setState({ alertOpen: false })}
+        />
+
+        <DashboardContent handleAlert={handleAlert} />
+      </ThemeProvider>
+    </div>
+  );
 }
 
-export default App;
+// export default App;

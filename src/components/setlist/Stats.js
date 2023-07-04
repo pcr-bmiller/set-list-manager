@@ -30,8 +30,9 @@ import Button from "@material-ui/core/Button";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { green } from "@material-ui/core/colors";
 // Icons
-import EditIcon from "@material-ui/icons/EditOutlined";
+import EditIcon from "@material-ui/icons/Edit";
 import Title from "../utils/Title";
+import * as Models from "./Models";
 import { getCookie, pingTokenBAOBAB, millisToMinutesAndSeconds } from "../utils/HelperFunctions";
 function preventDefault(event) {
   event.preventDefault();
@@ -50,13 +51,19 @@ function StatsContent(props) {
   const [intervalStarted, setIntervalStarted] = useState(false);
   const mountedRef = useRef(true);
   const [totalDuration, setTotalDuration] = useState("00:00:00");
-
+  const [reRender, setReRender] = useState("key");
   const forceUpdate = useForceUpdate();
+  const [setListSelected, setSetListSelected] = useState(getCookie("x_setlist"));
+  // const [setList, setSetList] = useState(props.setList);
+  // const [setListDetails, setSetListDetails] = useState(props.setListDetails);
 
   let interval;
 
   useEffect(() => {
-    console.log("props = ", props.setList);
+    console.log("setlist details = ", props.setListDetails);
+    console.log("setlist = ", props.setList);
+    if (getCookie("x_setlist")) {
+    }
   }, []);
 
   useEffect(() => {
@@ -106,15 +113,61 @@ function StatsContent(props) {
     }
   }, [props.setList]);
 
-  const setlists = [
-    { label: "Welcome to Rockville", year: 1994 },
-    { label: "The Godfather", year: 1972 },
-    { label: "The Godfather: Part II", year: 1974 },
-    { label: "The Dark Knight", year: 2008 },
-    { label: "12 Angry Men", year: 1957 },
-    { label: "Schindler's List", year: 1993 },
-    { label: "Pulp Fiction", year: 1994 },
-  ];
+  useEffect(() => {
+    if (props.setListDetails) {
+      console.log("SETTING DETAILS ROW KEY = ", props.setListDetails.rowkey);
+      setSetListSelected(props.setListDetails.rowkey);
+      setReRender(new Date().getTime());
+    }
+  }, [props.setListDetails]);
+
+  const saveSetlist = async () => {
+    const setListDetails = props.setListDetails;
+    const setList = props.setList;
+    console.log("setListDetails = ", setListDetails);
+    console.log("setList = ", setList);
+    if (setListDetails) {
+      console.log("setList = ", setList);
+      console.log("setListDetails = ", setListDetails);
+      let id = setListDetails.rowkey;
+      let body = await getSongsBody();
+      console.log("body = ", body);
+      let response = await Models.patchTable({ table: "SETLIST", id, body });
+      props.handleAlert("Setlist Updated!", "success");
+      console.log("Patch response = ", response);
+    }
+
+    // console.log("songsRead= ", songsRead);
+    // if (songsRead) {
+    //   // Set All Songs
+    //   console.log("set all songs = ", songsRead);
+    //   setAllSongs(songsRead);
+    // }
+  };
+
+  const getSongsBody = async () => {
+    let body = {};
+    body = { setlist: [...props.setList] };
+    body = { Songs: JSON.stringify(body) };
+    return body;
+  };
+
+  const saveSetlistDetails = async () => {
+    const setListDetails = props.setListDetails;
+    const setList = props.setList;
+    console.log("setListDetails = ", setListDetails);
+    console.log("setList = ", setList);
+    if (setListDetails) {
+      console.log("setList = ", setList);
+      console.log("setListDetails = ", setListDetails);
+      let id = setListDetails.rowkey;
+      let body = { Name: setListDetails.Name };
+      let response = await Models.patchTable({ table: "SETLIST", id, body });
+      props.handleAlert("Setlist Updated!", "success");
+      console.log("Patch response = ", response);
+    }
+  };
+
   return (
     <React.Fragment>
       <Table size="small" aria-label="a dense table">
@@ -150,10 +203,29 @@ function StatsContent(props) {
               <TableCell>
                 {" "}
                 <Autocomplete
-                  disablePortal
+                  disableClearable
+                  key={`${reRender}_setlist`}
                   id="combo-box-demo"
                   options={props.setLists && props.setLists}
+                  // defaultValue={props.setLists ? setListSelected : null}
+                  // renderOption={(option) => <>{option.label}</>}
+                  // getOptionLabel={(option) => option.label}
+                  // getOptionSelected={(option, value) => option.value === value.value}
+                  defaultValue={
+                    props.setLists && props.setList
+                      ? props.setLists.find((opt) => {
+                          console.log("opt = ", opt);
+                          console.log("setListSelected = ", setListSelected);
+
+                          if (opt.value == setListSelected) {
+                            console.log("FOUND = ", opt);
+                            return opt;
+                          }
+                        })
+                      : null
+                  }
                   onChange={(e, val) => {
+                    console.log("val = ", val);
                     props.handleSetlist(val);
                   }}
                   sx={{ width: 300 }}
@@ -161,17 +233,39 @@ function StatsContent(props) {
                 />
               </TableCell>
               <TableCell>
-                <IconButton color="inherit">
+                {" "}
+                <IconButton
+                  color="inherit"
+                  onClick={() => {
+                    props.setCreateSetListModalOpen(true);
+                  }}
+                >
                   <Badge badgeContent={0} color="primary">
                     <AddCircleIcon />
                   </Badge>
                 </IconButton>
-                <IconButton disabled={true} color="inherit">
+                <IconButton
+                  disabled={false}
+                  color="inherit"
+                  onClick={() => {
+                    props.setCreateSetListModalOpen(true);
+                  }}
+                >
+                  <Badge badgeContent={0} color="primary">
+                    <EditIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton
+                  disabled={props.isDirty ? false : true}
+                  color="inherit"
+                  onClick={() => {
+                    saveSetlist();
+                  }}
+                >
                   <Badge badgeContent={0} color="primary">
                     <SaveIcon />
                   </Badge>
                 </IconButton>
-
                 <IconButton color="inherit">
                   <Badge badgeContent={0} color="primary">
                     <SaveAsIcon />
