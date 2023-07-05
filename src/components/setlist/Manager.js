@@ -86,6 +86,11 @@ const SetlistManager = (props) => {
     }
     return setlistsRead;
   };
+  const refreshSetLists = async () => {
+    let setLists = await getSetlists();
+
+    await handleSetlist(null, setLists);
+  };
   const handleSetlist = async (sl = null, pSetlists = null, pSetList = null) => {
     if (pSetlists === null) {
       pSetlists = setLists;
@@ -196,6 +201,8 @@ const SetlistManager = (props) => {
   };
   const handleEditSetList = (values) => {
     console.log("PATCH VALUES = ", values);
+    updateSetlistName(values.Name);
+    refreshSetLists();
     // allSongs.push(values);
     // setAllSongs([...allSongs]);
   };
@@ -225,31 +232,22 @@ const SetlistManager = (props) => {
     [allSongs]
   );
 
-  const getCommonEditTextFieldProps = useCallback(
-    (cell) => {
-      return {
-        error: !!validationErrors[cell.id],
-        helperText: validationErrors[cell.id],
-        onBlur: (event) => {
-          const isValid = true;
-          if (!isValid) {
-            //set validation error for cell if invalid
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: `${cell.column.columnDef.header} is required`,
-            });
-          } else {
-            //remove validation error for cell if valid
-            delete validationErrors[cell.id];
-            setValidationErrors({
-              ...validationErrors,
-            });
-          }
-        },
-      };
-    },
-    [validationErrors]
-  );
+  const updateSetlistName = async (name = null) => {
+    let id = setListDetails ? setListDetails.rowkey : null;
+    if (name && id) {
+      let body = { Name: name };
+      console.log("body = ", body);
+      let response = await Models.patchTable({ table: "SETLIST", id, body });
+      props.handleAlert("Setlist Name Updated!", "success");
+    }
+
+    // console.log("songsRead= ", songsRead);
+    // if (songsRead) {
+    //   // Set All Songs
+    //   console.log("set all songs = ", songsRead);
+    //   setAllSongs(songsRead);
+    // }
+  };
 
   const commonTableProps = {
     columns,
@@ -417,12 +415,15 @@ const SetlistManager = (props) => {
           columns={setListColumns}
           open={createSetListModalOpen}
           onClose={() => setCreateSetListModalOpen(false)}
+          mode="New"
           onSubmit={handleCreateNewSetList}
         />
         <SetListModal
           columns={setListColumns}
           open={editSetListModalOpen}
           onClose={() => setEditSetListModalOpen(false)}
+          mode="Edit"
+          setListDetails={setListDetails}
           onSubmit={handleEditSetList}
         />
       </Box>
@@ -476,7 +477,14 @@ export const CreateNewSongModal = ({ open, columns, onClose, onSubmit }) => {
     </Dialog>
   );
 };
-export const SetListModal = ({ open, columns, onClose, onSubmit, mode = "New" }) => {
+export const SetListModal = ({
+  open,
+  columns,
+  onClose,
+  onSubmit,
+  mode = "New",
+  setListDetails = null,
+}) => {
   const [values, setValues] = useState(() =>
     columns.reduce((acc, column) => {
       acc[column.accessorKey ?? ""] = "";
@@ -502,11 +510,16 @@ export const SetListModal = ({ open, columns, onClose, onSubmit, mode = "New" })
               gap: "1.5rem",
             }}
           >
+            {console.log(
+              "setListDetails component = ",
+              mode === "Edit" && setListDetails ? setListDetails.Name : null
+            )}
             {columns.map((column) => (
               <TextField
                 key={column.accessorKey}
                 label={column.header}
                 name={column.accessorKey}
+                defaultValue={mode === "Edit" && setListDetails ? setListDetails.Name : null}
                 onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
               />
             ))}

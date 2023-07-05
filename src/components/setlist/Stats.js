@@ -248,7 +248,7 @@ function StatsContent(props) {
                   disabled={false}
                   color="inherit"
                   onClick={() => {
-                    props.setCreateSetListModalOpen(true);
+                    props.setEditSetListModalOpen(true);
                   }}
                 >
                   <Badge badgeContent={0} color="primary">
