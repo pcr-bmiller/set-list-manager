@@ -638,3 +638,60 @@ input {
 .modal-padding {
   padding-top: 25px !important;
 }
+
+.preview-panel {
+  background-color: white;
+  width: 800px !important;
+}
+.preview-panel .MuiTableCell-root {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+.preview-logo {
+  width: 400px;
+}
+
+.preview-tuning {
+  font-weight: bold !important;
+  font-size: 36px !important;
+  padding-left: 30px !important;
+}
+.preview-C {
+  color: red !important;
+}
+.preview-D {
+  color: rgb(41, 98, 203) !important;
+}
+.preview-A {
+  color: green !important;
+}
+.preview-title {
+  color: black !important;
+}
+.preview-group-2 {
+  color: lightseagreen !important;
+}
+.preview-group-3 {
+  color: rgb(205, 116, 0) !important;
+}
+.preview-group-4 {
+  color: rgb(137, 32, 178) !important;
+}
+.preview-group-5 {
+  color: rgb(178, 32, 112) !important;
+}
+.preview-group-6 {
+  color: rgb(0, 98, 202) !important;
+}
+.preview-group-7 {
+  color: rgb(178, 151, 32) !important;
+}
+.preview-group-8 {
+  color: rgb(124, 3, 85) !important;
+}
+.preview-group-9 {
+  color: lightseagreen !important;
+}
+.preview-group-10 {
+  color: rgb(23, 0, 115) !important;
+}

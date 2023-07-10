@@ -3,7 +3,9 @@ import { MaterialReactTable } from "material-react-table";
 import Button from "@mui/material/Button";
 import MuiMenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material";
-
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   Dialog,
   DialogActions,
@@ -33,6 +35,7 @@ import Badge from "@mui/material/Badge";
 import { Box, Typography } from "@mui/material";
 import { getCookie } from "../utils/HelperFunctions";
 import { data } from "./MakeData";
+import { midi } from "./MidiData";
 import * as Models from "./Models";
 import Stats from "./Stats";
 
@@ -232,6 +235,22 @@ const SetlistManager = (props) => {
     [allSongs]
   );
 
+  const createSetlist = async (name = null, date = null) => {
+    let id = name ? `${name.toUpperCase()}_` : null;
+    if (name && id) {
+      let body = { Name: name };
+      console.log("body = ", body);
+      let response = await Models.postTable({ table: "SETLIST", id, body });
+      props.handleAlert("Setlist Updated!", "success");
+    }
+
+    // console.log("songsRead= ", songsRead);
+    // if (songsRead) {
+    //   // Set All Songs
+    //   console.log("set all songs = ", songsRead);
+    //   setAllSongs(songsRead);
+    // }
+  };
   const updateSetlistName = async (name = null) => {
     let id = setListDetails ? setListDetails.rowkey : null;
     if (name && id) {
@@ -427,6 +446,68 @@ const SetlistManager = (props) => {
           onSubmit={handleEditSetList}
         />
       </Box>
+      {/* <br />
+      <Box
+        sx={{
+          display: "grid",
+          align: "center",
+          // gridTemplateColumns: { xs: "auto", lg: "48% 50% " },
+          // gap: "1rem",
+          // overflow: "auto",
+        }}
+      >
+        <Table size="small" className="preview-panel" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Guitar</TableCell>
+              <TableCell align="center">
+                <img src="../filter-logo.png" className="preview-logo" alt="Filter" />
+              </TableCell>
+
+              <TableCell align="right">V2</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((x) => {
+              return (
+                <TableRow>
+                  <TableCell className={`preview-tuning preview-${x.Guitar}`}>{x.Guitar}</TableCell>
+                  <TableCell className={`preview-tuning preview-title`}>{x.Name}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+        <br />
+        <Table size="small" className="preview-panel" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Bass</TableCell>
+              <TableCell align="center">
+                <img src="../filter-logo.png" className="preview-logo" alt="Filter" />
+              </TableCell>
+              <TableCell align="right">V2</TableCell>
+            </TableRow>
+          </TableHead>
+        </Table>
+        <Table size="small" className="preview-panel" aria-label="a dense table">
+          <TableBody>
+            {data.map((x, i) => {
+              return (
+                <TableRow>
+                  <TableCell>
+                    <TableCell className={`preview-tuning preview-group-${midi[i].group}`}>
+                      {midi[i].button}
+                    </TableCell>
+                    <TableCell className={`preview-tuning preview-${x.Bass}`}>{x.Bass}</TableCell>
+                  </TableCell>
+                  <TableCell className={`preview-tuning preview-title`}>{x.Name}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Box> */}
     </>
   );
 };
@@ -523,6 +604,18 @@ export const SetListModal = ({
                 onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
               />
             ))}
+            {mode === "New" && (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker />
+              </LocalizationProvider>
+              // <TextField
+              //   key={"date"}
+              //   label={"Show Date"}
+              //   name={"showdate"}
+              //   defaultValue={mode === "Edit" && setListDetails ? setListDetails.Date : null}
+              //   onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+              // />
+            )}
           </Stack>
         </form>
       </DialogContent>
