@@ -179,7 +179,10 @@ function Header(props) {
         {/* <Avatar alt="Rotten Bobby" className={classes.purple} src={`data:image/png;base64, ${encodedImg}`} /> */}
         {/* <Avatar alt="Rotten Bobby" className={classes.purple} src="./profile.jpg" /> */}
         {/* </div> */}
-        <Menu
+        <IconButton>
+          <img src="../spotify-icon.png" className="spotify-logo" />
+        </IconButton>
+        {/* <Menu
           id="simple-menu"
           anchorEl={anchorEl2}
           open={Boolean(anchorEl2)}
@@ -206,7 +209,7 @@ function Header(props) {
             </Link>
           </MenuItem>
           <MenuItem onClick={props.routeToLogout}>Logout</MenuItem>
-        </Menu>
+        </Menu> */}
       </div>
     </>
   );

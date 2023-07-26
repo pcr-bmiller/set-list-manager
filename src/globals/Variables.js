@@ -5,6 +5,7 @@ export const TITLE = process.env.REACT_APP_TITLE;
 export const ENVIRONMENT = process.env.REACT_APP_ENVIRONMENT;
 export const ISSUER = process.env.REACT_APP_ISSUER;
 export const STORAGE_ACCOUNT = process.env.REACT_APP_STORAGE_ACCOUNT;
+export const SPOTIFY_CLIENTID = process.env.REACT_APP_SPOTIFY_CLIENTID;
 
 export const STORAGE_SAS = process.env.REACT_APP_STORAGE_SAS;
 

@@ -38,6 +38,7 @@ import { data } from "./MakeData";
 import { midi } from "./MidiData";
 import * as Models from "./Models";
 import Stats from "./Stats";
+import axios from "axios";
 
 const SetlistManager = (props) => {
   const [dataRead, setData] = useState({});
@@ -191,7 +192,32 @@ const SetlistManager = (props) => {
   const [tableData, setTableData] = useState(() => [...setList]);
   const [validationErrors, setValidationErrors] = useState({});
   const [isDirty, setIsDirty] = useState(false);
-
+  const [searchKey, setSearchKey] = useState("");
+  const [artists, setArtists] = useState([]);
+  const searchArtists = async (e) => {
+    let token = window.localStorage.getItem("token");
+    e.preventDefault();
+    const { data } = await axios.get("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        q: searchKey,
+        type: "artist",
+        scope: "playlist-modify-public",
+      },
+    });
+    // const { data } = await axios.post("https://api.spotify.com/v1/users/1l0zk6d4pz0q134u03wfv2fzq/playlists", {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    //   params: {
+    //     q: searchKey,
+    //     type: "artist",
+    //   },
+    // });
+    setArtists(data.artists.items);
+  };
   const handleCreateNewRow = (values) => {
     console.log("POST VALUES = ", values);
     allSongs.push(values);
@@ -280,7 +306,18 @@ const SetlistManager = (props) => {
     onDraggingRowChange: setDraggingRow,
     state: { draggingRow, rowSelection },
   };
-
+  const renderArtists = () => {
+    return artists.map((artist) => (
+      <div key={artist.id}>
+        {artist.images.length ? (
+          <img width={"100%"} src={artist.images[0].url} alt="" />
+        ) : (
+          <div>No Image</div>
+        )}
+        {artist.name}
+      </div>
+    ));
+  };
   return (
     <>
       <Stats
@@ -446,6 +483,11 @@ const SetlistManager = (props) => {
           onSubmit={handleEditSetList}
         />
       </Box>
+      <form onSubmit={searchArtists}>
+        <input type="text" onChange={(e) => setSearchKey(e.target.value)} />
+        <button type={"submit"}>Search</button>
+      </form>
+      {renderArtists()}
       {/* <br />
       <Box
         sx={{
