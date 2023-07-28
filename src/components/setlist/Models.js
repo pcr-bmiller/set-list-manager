@@ -195,7 +195,7 @@ export async function patchTable({ table, id, body }) {
     return { error: false };
   }
 }
-export async function postTable({ table, id, body }) {
+export async function postTable({ table, body }) {
   const service = globals.SERVICES["ROTTEN"];
 
   let fetchProperties = {

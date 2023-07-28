@@ -39,6 +39,7 @@ import { midi } from "./MidiData";
 import * as Models from "./Models";
 import Stats from "./Stats";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const SetlistManager = (props) => {
   const [dataRead, setData] = useState({});
@@ -68,10 +69,10 @@ const SetlistManager = (props) => {
 
   const getSongs = async () => {
     let songsRead = await Models.getTable({ table: "SONG" });
-    console.log("songsRead= ", songsRead);
+
     if (songsRead) {
       // Set All Songs
-      console.log("set all songs = ", songsRead);
+
       setAllSongs(songsRead);
     }
     return songsRead;
@@ -85,15 +86,15 @@ const SetlistManager = (props) => {
         sl["label"] = sl.Name;
         sl["value"] = sl.rowkey;
       }
-      console.log("set setlists = ", setlistsRead);
+
       setSetLists(setlistsRead);
     }
     return setlistsRead;
   };
-  const refreshSetLists = async () => {
+  const refreshSetLists = async (pSetList = null) => {
     let setLists = await getSetlists();
 
-    await handleSetlist(null, setLists);
+    await handleSetlist(pSetList, setLists);
   };
   const handleSetlist = async (sl = null, pSetlists = null, pSetList = null) => {
     if (pSetlists === null) {
@@ -104,7 +105,7 @@ const SetlistManager = (props) => {
     setIsDirty(false);
     console.log("handleSetlist = ", sl);
     let sls = pSetlists;
-    console.log("SL 1=== ", sl);
+
     // if (sl === null) {
     //   if (setList !== null) {
     //     sl = setList;
@@ -223,8 +224,19 @@ const SetlistManager = (props) => {
     allSongs.push(values);
     setAllSongs([...allSongs]);
   };
-  const handleCreateNewSetList = (values) => {
+  const handleCreateNewSetList = async (values) => {
     console.log("POST VALUES = ", values);
+    let songs = await getSongsBody();
+    let body = {};
+    body["PartitionKey"] = "ROTTEN";
+    body["RowKey"] = `${values.Name}_${values.Date}`;
+    body = { ...body, ...songs, ...values, Version: 1 };
+
+    let response = await Models.postTable({ table: "SETLIST", body });
+    props.handleAlert("Setlist Created!", "success");
+    document.cookie = `x_setlist=${values.Name}_${values.Date}`;
+    refreshSetLists();
+
     // allSongs.push(values);
     // setAllSongs([...allSongs]);
   };
@@ -261,22 +273,6 @@ const SetlistManager = (props) => {
     [allSongs]
   );
 
-  const createSetlist = async (name = null, date = null) => {
-    let id = name ? `${name.toUpperCase()}_` : null;
-    if (name && id) {
-      let body = { Name: name };
-      console.log("body = ", body);
-      let response = await Models.postTable({ table: "SETLIST", id, body });
-      props.handleAlert("Setlist Updated!", "success");
-    }
-
-    // console.log("songsRead= ", songsRead);
-    // if (songsRead) {
-    //   // Set All Songs
-    //   console.log("set all songs = ", songsRead);
-    //   setAllSongs(songsRead);
-    // }
-  };
   const updateSetlistName = async (name = null) => {
     let id = setListDetails ? setListDetails.rowkey : null;
     if (name && id) {
@@ -285,13 +281,6 @@ const SetlistManager = (props) => {
       let response = await Models.patchTable({ table: "SETLIST", id, body });
       props.handleAlert("Setlist Name Updated!", "success");
     }
-
-    // console.log("songsRead= ", songsRead);
-    // if (songsRead) {
-    //   // Set All Songs
-    //   console.log("set all songs = ", songsRead);
-    //   setAllSongs(songsRead);
-    // }
   };
 
   const commonTableProps = {
@@ -317,6 +306,28 @@ const SetlistManager = (props) => {
         {artist.name}
       </div>
     ));
+  };
+
+  // const saveSetlist = async () => {
+  //   console.log("setListDetails = ", setListDetails);
+  //   console.log("setList = ", setList);
+  //   if (setListDetails) {
+  //     console.log("setList = ", setList);
+  //     console.log("setListDetails = ", setListDetails);
+  //     let id = setListDetails.rowkey;
+  //     let body = await getSongsBody();
+  //     // console.log("body = ", body);
+  //     // let response = await Models.patchTable({ table: "SETLIST", id, body });
+  //     // props.handleAlert("Setlist Updated!", "success");
+  //     // console.log("Patch response = ", response);
+  //   }
+  // };
+
+  const getSongsBody = async () => {
+    let body = {};
+    body = { setlist: [...setList] };
+    body = { Songs: JSON.stringify(body) };
+    return body;
   };
   return (
     <>
@@ -483,13 +494,13 @@ const SetlistManager = (props) => {
           onSubmit={handleEditSetList}
         />
       </Box>
-      <form onSubmit={searchArtists}>
+      {/* <form onSubmit={searchArtists}>
         <input type="text" onChange={(e) => setSearchKey(e.target.value)} />
         <button type={"submit"}>Search</button>
       </form>
-      {renderArtists()}
-      {/* <br />
-      <Box
+      {renderArtists()} */}
+      <br />
+      {/* <Box
         sx={{
           display: "grid",
           align: "center",
@@ -648,7 +659,17 @@ export const SetListModal = ({
             ))}
             {mode === "New" && (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker />
+                <DatePicker
+                  className="muiDateControlInput"
+                  name="showDate"
+                  id="Date"
+                  onChange={(e) => {
+                    let date = dayjs(e).format("YYYY-MM-DD");
+                    setValues({ ...values, Date: date });
+                    // handleDateChange(date, 'datetime-from');
+                  }}
+                  // value={dateTimeFrom && dayjs.utc(dateTimeFrom)} onChange={() => {}} />
+                />
               </LocalizationProvider>
               // <TextField
               //   key={"date"}
